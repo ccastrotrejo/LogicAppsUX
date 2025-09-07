@@ -28,8 +28,15 @@
   "dependencies": {
     "@fluentui/react-components": "^9.54.20",
     "@fluentui/react-icons": "^2.0.266",
+    "@tanstack/react-query": "4.36.1",
+    "@reduxjs/toolkit": "1.8.5",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-redux": "8.0.2",
+    "redux-thunk": "2.4.2",
+    "immer": "9.0.15",
+    "reselect": "4.1.8",
+    "uuid": "^10.0.0"
   },
   "build": {
     "appId": "com.microsoft.apphub",

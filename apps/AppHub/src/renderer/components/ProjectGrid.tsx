@@ -124,7 +124,11 @@ interface Project {
   isFavorite?: boolean;
 }
 
-const ProjectGrid: React.FC = () => {
+interface ProjectGridProps {
+  onProjectOpen: (projectName: string) => void;
+}
+
+const ProjectGrid: React.FC<ProjectGridProps> = ({ onProjectOpen }) => {
   const styles = useStyles();
 
   const projects: Project[] = [
@@ -226,10 +230,22 @@ const ProjectGrid: React.FC = () => {
     }
   };
 
+  const handleCardClick = (project: Project, event: React.MouseEvent) => {
+    // Don't trigger if clicking on more button
+    if ((event.target as HTMLElement).closest('button')) {
+      return;
+    }
+    onProjectOpen(project.title);
+  };
+
   return (
     <div className={styles.grid}>
       {projects.map(project => (
-        <Card key={project.id} className={styles.projectCard}>
+        <Card 
+          key={project.id} 
+          className={styles.projectCard}
+          onClick={(event) => handleCardClick(project, event)}
+        >
           <div className={`${styles.cardPreview} ${getPreviewClass(project.previewType)}`}>
             {project.isFavorite && (
               <div className={styles.favoriteIcon}>
@@ -247,6 +263,7 @@ const ProjectGrid: React.FC = () => {
                 appearance="transparent"
                 className={styles.moreButton}
                 icon={<MoreHorizontalRegular fontSize={16} />}
+                onClick={(event) => event.stopPropagation()}
               />
             </div>
             

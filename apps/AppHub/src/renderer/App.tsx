@@ -3,6 +3,7 @@ import { makeStyles } from '@fluentui/react-components';
 import TabBar from './components/TabBar';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
+import DesignerPage from './pages/DesignerPage';
 
 const useStyles = makeStyles({
   app: {
@@ -23,6 +24,7 @@ interface Tab {
   title: string;
   type: 'home' | 'project';
   isActive: boolean;
+  projectName?: string;
 }
 
 const App: React.FC = () => {
@@ -51,6 +53,35 @@ const App: React.FC = () => {
     })));
   };
 
+  const handleProjectOpen = (projectName: string) => {
+    const projectId = projectName.toLowerCase().replace(/\s+/g, '-');
+    
+    // Check if tab already exists
+    const existingTab = tabs.find(tab => tab.id === projectId);
+    if (existingTab) {
+      handleTabSelect(projectId);
+      return;
+    }
+
+    // Create new project tab
+    const newTab: Tab = {
+      id: projectId,
+      title: projectName,
+      type: 'project',
+      isActive: true,
+      projectName: projectName,
+    };
+
+    // Deactivate other tabs and add new one
+    const updatedTabs = tabs.map(tab => ({ ...tab, isActive: false }));
+    updatedTabs.push(newTab);
+    setTabs(updatedTabs);
+  };
+
+  const handleBackToHome = () => {
+    handleTabSelect('home');
+  };
+
   const activeTab = tabs.find(tab => tab.isActive);
 
   return (
@@ -63,7 +94,15 @@ const App: React.FC = () => {
       />
       <div className={styles.content}>
         <Sidebar />
-        {activeTab?.type === 'home' && <HomePage />}
+        {activeTab?.type === 'home' && (
+          <HomePage onProjectOpen={handleProjectOpen} />
+        )}
+        {activeTab?.type === 'project' && activeTab.projectName && (
+          <DesignerPage 
+            projectName={activeTab.projectName}
+            onBack={handleBackToHome}
+          />
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,10 @@ import { makeStyles, Text, Button, Input } from '@fluentui/react-components';
 import { AddRegular, MoreHorizontalRegular, FilterRegular } from '@fluentui/react-icons';
 import ProjectGrid from '../components/ProjectGrid';
 
+interface HomePageProps {
+  onProjectOpen: (projectName: string) => void;
+}
+
 const useStyles = makeStyles({
   homePage: {
     flex: 1,
@@ -87,7 +91,7 @@ const useStyles = makeStyles({
   },
 });
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC<HomePageProps> = ({ onProjectOpen }) => {
   const styles = useStyles();
 
   const filterTabs = [
@@ -146,7 +150,7 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className={styles.content}>
-        <ProjectGrid />
+        <ProjectGrid onProjectOpen={onProjectOpen} />
       </div>
     </div>
   );
